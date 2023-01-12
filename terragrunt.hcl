@@ -23,7 +23,6 @@ EOF
 }
 
 #Configure the remote state backend. Terragrunt does not support multiple local blocks in a single config.
-#Remote RG, SA and Container has to be hardcoded. Either in the root terragrunt.hcl or at the environment level.
 remote_state {
   backend = "azurerm"
   config = {
