@@ -1,3 +1,3 @@
-#This is a directory for a default Terragrunt template. I will add documentation and "how to" later on.
+<h1>Terragrunt - simplify your deployment with this nifty little wrapper</h1>
 
 ![alt text](https://i.imgur.com/l0msF1l.gif)
