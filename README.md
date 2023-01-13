@@ -1,6 +1,6 @@
 <h1>Terragrunt - simplify your deployment with this nifty little wrapper</h1>
 
-<h2>_Disclaimer: I recently started learning Terragrunt and created this repository for my own purposes. This will gradually be updated. I am not suggesting that is how you <b>should</b> do it, just how I am using the tool for my own purposes._</h2>
+<h4><u>Disclaimer</u>: I recently started learning Terragrunt and created this repository for my own purposes. This will gradually be updated. I am not suggesting that is how you should do it, just how I am using the tool for my own purposes.</h4>
 
 <h2>1. Why Terragrunt?</h2>
 Terragrunt is a wrapper for Terraform, that sort of re-configures the way you'd normally define a deployment. The whole concept of Terragrunt is the term "DRY", which I am certain that you're probably familiar with. i.e <i>"Don't repeat yourself"</i>. 
