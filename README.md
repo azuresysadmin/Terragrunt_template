@@ -18,7 +18,7 @@ Terragrunt is using the same commands as Terraform, such as "init", "plan" and "
 ## 4. How does it work? 
 The main purporse of Terragrunt is to remove as much of manual inputs as possible, so that you can easily swap to a different region, subscription or environment without having to alter that many inputs. I will describe the thought of my template and a tad bit on how Terragrunt works. 
 
-#### *1. File structure*
+#### *<ins>File structure</ins>*
 ```
 📦Customer_root
  ┣ 📂Development
@@ -48,7 +48,7 @@ The main purporse of Terragrunt is to remove as much of manual inputs as possibl
 *Obviously, this structure is supposed to be mirrored if you're using a different environment, such as "production".*
 
 _Most resources or configurations in the repository has comments added in the code, if something won't be explained within the README._
-#### *2. Defining your root configuration - terragrunt.hcl*
+#### *<ins>Defining your root configuration - terragrunt.hcl</ins>*
 Terragrunt's configuration is defined in a file called 'terragrunt.hcl' that you place in your root directory. This is a parent file, that all other sub-configuration files will refer to. Terragrunt will always climb up the tree structure to find a matching parent configuration. In this particular file you define the default settings and variables that all of your sub-directories can use and will refer to. This includes the provider(s) and its required versions, subscription and remote backend configuration. As you can see in the parent file, you can use variables within your backend configuration.
 
 Another brilliant DRY feature is that you can define the provider directly in the parent configuration, which means that you'll never have to define the provider in your modules, as you have to do with a vanilla Terraform configuration.
@@ -56,16 +56,16 @@ Another brilliant DRY feature is that you can define the provider directly in th
 This is also where you specify your inputs and locals. I have specified the locals within each region/environment etc. By merging these in the root file, as you can see for "region_vars" and "environment_vars", you can specify several within one child configuration file. For instance I have stored the local inputs for the remote backend in the same "env.hcl" file. 
 
 This grants you the opportunity to write as little as code as possible. Some locals will probably be permanent for each environment, such as "env=dev" and "location=westeurope". Terragrunt will also automatically create a file structure for your state file, based on from where you initiate the command. 
-If I were to say, run a Terragrunt apply from within the resource_group directory under >Customer_root>dev>region>resource_group, the folder structure would be automatically built by Terragrunt in your remote backend (i.e Storage Account container).
+If I were to say, run a Terragrunt apply from within the resource_group directory under "/Customer_root/dev/westeurope/resource_group, the folder structure would be automatically built by Terragrunt in your remote backend (i.e Storage Account container).
 
-#### *3. Creating .hcl files for your directories*
+#### *<ins>Creating .hcl files for your directories</ins>*
 If I were to initiate Terragrunt from within the resource_group (region/dev), it would firstly look in that directory to find an input to the defined variables, if Terragrunt won't find it there, it will move one level up, and then again and again until it reaches the parent configuration. This means that you can do very delicate definitions, but you can also refer to the parent configuration directly, if that's what you want. 
 
 Firstly, I have created an "env.hcl" in my Development/Production directory, which is where I will define my locals for that specific region. After that, I have created a "region.hcl" in the region folder, that I define based on where that resource will be run/created, such as "westeurope". These inputs will most likely be permanent for this directory. 
 
 We can then move further down in the directory, to resource specific Terragrunt configurations. In this file, you will tell Terragrunt to look for the parent configuration, which is what I described previously on how Terragrunt will search for the necessary inputs and configurations. This is also were you'd define your inputs, so that your resource blocks can consist of variables, instead of hardcoded inputs. 
 
-#### *4. Working with modules*
+#### *<ins>Working with modules</ins>*
 Take a look at the "module1" directory and you'll notice that I am using an example from the public module repository. In this case, I am using a Vnet Module as an example. As you can see, you can create this resource solely without having to use any regular .tf files. 
 - Refer to the module URL and its version
 - Once again, include the "find in parent folders" configuration, just as you did with your RG
