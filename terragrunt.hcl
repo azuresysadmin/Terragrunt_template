@@ -22,7 +22,7 @@ generate "versions" {
 EOF
 }
 
-#Configure the remote state backend. Terragrunt does not support multiple local blocks in a single config.
+#Configure the remote state backend. Terragrunt will store a backend.tf in the directory from where you initiate the build.
 remote_state {
   backend = "azurerm"
   config = {
