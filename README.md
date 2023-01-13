@@ -19,30 +19,34 @@ Terragrunt is using the same commands as Terraform, such as "init", "plan" and "
 The main purporse of Terragrunt is to remove as much of manual inputs as possible, so that you can easily swap to a different region, subscription or environment without having to alter that many inputs. I will describe the thought of my template and a tad bit on how Terragrunt works. 
 
 - *File structure*
-    ```<Customer>
-        <Development>
-            <global>
-                <resource>
-                <modules>
-                    <module1>
-                    <module2>
-            <westeurope>
-                <resource>
-                <modules>
-                    <module1>
-                    <module2>
-        <Production>
-            <global>
-                <resource>
-                <modules>
-                    <module1>
-                    <module2>
-            <westeurope>
-                <resource>
-                <modules>
-                    <module1>
-                    <module2>
-```
 
+📦Customer_root
+ ┣ 📂Development
+ ┃ ┣ 📂region
+ ┃ ┃ ┣ 📂modules
+ ┃ ┃ ┃ ┗ 📂module1
+ ┃ ┃ ┃ ┃ ┗ 📜terragrunt.hcl
+ ┃ ┃ ┣ 📂resource_group
+ ┃ ┃ ┃ ┣ 📜main.tf
+ ┃ ┃ ┃ ┣ 📜outputs.tf
+ ┃ ┃ ┃ ┣ 📜terragrunt.hcl
+ ┃ ┃ ┃ ┗ 📜variables.tf
+ ┃ ┃ ┗ 📜region.hcl
+ ┃ ┣ 📂region2
+ ┃ ┃ ┣ 📂modules
+ ┃ ┃ ┃ ┗ 📂module1
+ ┃ ┃ ┃ ┃ ┗ 📜terragrunt.hcl
+ ┃ ┃ ┣ 📂resource_group
+ ┃ ┃ ┃ ┣ 📜main.tf
+ ┃ ┃ ┃ ┣ 📜outputs.tf
+ ┃ ┃ ┃ ┣ 📜terragrunt.hcl
+ ┃ ┃ ┃ ┗ 📜variables.tf
+ ┃ ┃ ┗ 📜region.hcl
+ ┃ ┗ 📜env.hcl
+ ┗ 📜terragrunt.hcl
+
+ Obviously, this structure is supposed to be mirrored if you're using a different environment, such as "production".
 
 ![alt text](https://i.imgur.com/l0msF1l.gif)
+
+
