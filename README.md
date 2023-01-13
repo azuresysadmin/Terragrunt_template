@@ -19,7 +19,7 @@ Terragrunt is using the same commands as Terraform, such as "init", "plan" and "
 The main purporse of Terragrunt is to remove as much of manual inputs as possible, so that you can easily swap to a different region, subscription or environment without having to alter that many inputs. I will describe the thought of my template and a tad bit on how Terragrunt works. 
 
 - *File structure*
-    <Customer>
+    ```<Customer>
         <Development>
             <global>
                 <resource>
@@ -42,7 +42,7 @@ The main purporse of Terragrunt is to remove as much of manual inputs as possibl
                 <modules>
                     <module1>
                     <module2>
-
+```
 
 
 ![alt text](https://i.imgur.com/l0msF1l.gif)
