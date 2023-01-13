@@ -1,6 +1,6 @@
-# Terragrunt - simplify your deployment with this nifty little wrapper
+# Terragrunt - spend less time on writing, more on learning
 
-### Disclaimer: I recently started learning Terragrunt and created this repository for my own purposes. This will gradually be updated. I am not suggesting that is how you should do it, just how I am using the tool for my own purposes.
+### Disclaimer: I recently started learning Terragrunt and created this repository for my own purposes. This will gradually be updated. I am not suggesting that is how you should do it, just how I am using the tool for my own purposes. This template is written for Microsoft Azure.
 
 ## 1. Why Terragrunt?
 Terragrunt is a wrapper for Terraform, that sort of re-configures the way you'd normally define a deployment. The whole concept of Terragrunt is the term "DRY", which I am certain that you're probably familiar with. i.e *"Don't repeat yourself"*.
@@ -18,7 +18,7 @@ Terragrunt is using the same commands as Terraform, such as "init", "plan" and "
 ## 4. How does it work? 
 The main purporse of Terragrunt is to remove as much of manual inputs as possible, so that you can easily swap to a different region, subscription or environment without having to alter that many inputs. I will describe the thought of my template and a tad bit on how Terragrunt works. 
 
-- *File structure*
+#### *File structure*
 ```
 📦Customer_root
  ┣ 📂Development
@@ -45,7 +45,41 @@ The main purporse of Terragrunt is to remove as much of manual inputs as possibl
  ┃ ┗ 📜env.hcl
  ┗ 📜terragrunt.hcl
 ```
- Obviously, this structure is supposed to be mirrored if you're using a different environment, such as "production".
+*Obviously, this structure is supposed to be mirrored if you're using a different environment, such as "production".*
+
+_Most resources or configurations in the repository has comments added in the code, if something won't be explained within the README._
+#### *Defining your root configuration - terragrunt.hcl*
+Terragrunt's configuration is defined in a file called 'terragrunt.hcl' that you place in your root directory. This is a parent file, that all other sub-configuration files will refer to. Terragrunt will always climb up the tree structure to find a matching parent configuration. In this particular file you define the default settings and variables that all of your sub-directories can use and will refer to. This includes the provider(s) and its required versions, subscription and remote backend configuration. As you can see in the parent file, you can use variables within your backend configuration.
+
+Another brilliant DRY feature is that you can define the provider directly in the parent configuration, which means that you'll never have to define the provider in your modules, as you have to do with a vanilla Terraform configuration.
+
+This is also where you specify your inputs and locals. I have specified the locals within each region/environment etc. By merging these in the root file, as you can see for "region_vars" and "environment_vars", you can specify several within one child configuration file. For instance I have stored the local inputs for the remote backend in the same "env.hcl" file. 
+
+This grants you the opportunity to write as little as code as possible. Some locals will probably be permanent for each environment, such as "env=dev" and "location=westeurope". Terragrunt will also automatically create a file structure for your state file, based on from where you initiate the command. 
+If I were to say, run a Terragrunt apply from within the resource_group directory under >Customer_root>dev>region>resource_group, the folder structure would be automatically built by Terragrunt in your remote backend (i.e Storage Account container).
+
+#### *Creating .hcl files for your directories*
+If I were to initiate Terragrunt from within the resource_group (region/dev), it would firstly look in that directory to find an input to the defined variables, if Terragrunt won't find it there, it will move one level up, and then again and again until it reaches the parent configuration. This means that you can do very delicate definitions, but you can also refer to the parent configuration directly, if that's what you want. 
+
+Firstly, I have created an "env.hcl" in my Development/Production directory, which is where I will define my locals for that specific region. After that, I have created a "region.hcl" in the region folder, that I define based on where that resource will be run/created, such as "westeurope". These inputs will most likely be permanent for this directory. 
+
+We can then move further down in the directory, to resource specific Terragrunt configurations. In this file, you will tell Terragrunt to look for the parent configuration, which is what I described previously on how Terragrunt will search for the necessary inputs and configurations. This is also were you'd define your inputs, so that your resource blocks can consist of variables, instead of hardcoded inputs. 
+
+#### *Working with modules*
+Take a look at the "module1" directory and you'll notice that I am using an example from the public module repository. In this case, I am using a Vnet Module as an example. As you can see, you can create this resource solely without having to use any regular .tf files. 
+- Refer to the module URL and its version
+- Once again, include the "find in parent folders" configuration, just as you did with your RG
+- Define dependencies if needed
+- You need to create a mock RG, this won't be deployed, but Terragrunt needs a virtual resource group for it to be able to do the initialization, as it won't refer to the dependency until the resource gets planned/created. This can be named what ever and won't be created. 
+- As always, refer to the locals
+- Define the mandatory/optional inputs for your module
+
+#### *Terraform configuration*
+As this is a wrapper to Terraform, you still require your general .tf files, such as variables.tf, main.tf and outputs.tf. You define this just as you'd do with a regular Terraform configuration. 
+
+## 5. Conclusion
+Terragrunt might take some time to configure initially, especially if you want to define the .hcl configurations on a very deep level. 
+I found it quite easy to use after I had a few hours of proper trial and error. I, for one, will most likely depend upon Terragrunt for my next project, whether if it's a personal or billed project. It makes IaC more secure against human error and the whole concept of *DRY* really shines through as you start to get the hang of it. But yeah, that's it and that's all. You should be able to understand the basics of Terragrunt. Fire away.
 
 ![alt text](https://i.imgur.com/l0msF1l.gif)
 
