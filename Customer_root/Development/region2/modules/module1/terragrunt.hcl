@@ -1,4 +1,4 @@
-#Import a module. See foramtting of the URL below.
+#Import a module. See formatting of the URL below.
 terraform {
   source = "tfr:///Azure/vnet/azurerm//?version=3.2.0"
 }
@@ -8,7 +8,7 @@ include {
   path = find_in_parent_folders()
 }
 
-#Define a dependency if needed. Such as a resource group that the deployment should be put into. 
+#Define a dependency if needed, such as a resource group that the deployment should be deployed into. 
 dependencies {
   paths = ["../../resource_group"]
 }
@@ -16,14 +16,14 @@ dependencies {
 dependency "resource_group" {
   config_path = "../../resource_group"
 
-  #Placeholder for resource group - more info on what this does can be found @ https://gaunacode.com/using-terragrunt-to-deploy-to-azure
+#Placeholder for resource group. More specific information can be found @ https://gaunacode.com/using-terragrunt-to-deploy-to-azure
   mock_outputs = {
     vnet_resource_group_name = "rg-terragrunt-placeholder-1"
   }
   mock_outputs_merge_with_state = true
 }
 
-#Define the locals that the configuration requires
+#Define the locals that the configuration requires.
 locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   environment      = local.environment_vars.locals.environment
@@ -35,7 +35,7 @@ locals {
   contact      = local.environment_vars.locals.contact
 }
 
-#Define the mandatory/optional inputs and tags that the module requires
+#Define the mandatory/optional inputs and tags that the module requires.
 inputs = {
   vnet_name           = "vnet-${local.environment}-${local.location}-1337"
   resource_group_name = dependency.resource_group.outputs.vnet_resource_group_name
