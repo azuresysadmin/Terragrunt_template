@@ -1,4 +1,4 @@
-#Define the environment specific variables, such as tags, environment, subscription
+#Define the environment specific variables. Such as environment tags, subscription
 locals {
   environment     = "development"
   subscription_id = "PLACEHOLDER"
