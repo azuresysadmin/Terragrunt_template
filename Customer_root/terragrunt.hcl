@@ -1,7 +1,8 @@
-#This is an initial template for Terragrunt that should and will be re-used for different projects.
-#More information about the wrapper can be found at: https://github.com/gruntwork-io/terragrunt
+#This is an initial template for Terragrunt that should, and will be re-used for different projects. 
+#(More information about the wrapper can be found at: https://github.com/gruntwork-io/terragrunt)
 
-# Generate Azure providers and refer to the current subscription idea for the Terragrunt child configuration
+# Generate Azure providers and refer to the current subscription ID for the Terragrunt child configuration.
+
 generate "versions" {
   path      = "versions_override.tf"
   if_exists = "overwrite_terragrunt"
@@ -23,6 +24,7 @@ EOF
 }
 
 #Configure the remote state backend. Terragrunt will store a backend.tf in the directory from where you initiate the build.
+
 remote_state {
   backend = "azurerm"
   config = {
@@ -38,8 +40,8 @@ remote_state {
   }
 }
 
-# Force Terraform to keep trying to acquire a lock for
-# up to 20 minutes if someone else already has the lock
+# Force Terraform to keep trying to acquire a lock for up to 20 minutes if someone else already has the lock.
+
 terraform {
   extra_arguments "retry_lock" {
     commands = get_terraform_commands_that_need_locking()
@@ -56,14 +58,17 @@ terraform {
 # `terragrunt.hcl` config via the include block.
 # ---------------------------------------------------------------------------------------------------------------------
 
-# Configure root level variables that all resources can inherit. This is especially helpful with multi-account configs
-# where terraform_remote_state data sources are placed directly into the modules.
+# Configure root level variables that all resources can inherit. 
+#This is especially helpful with multi-account configs where terraform_remote_state data sources are placed directly into the modules.
+
 inputs = merge(
   local.region_vars.locals,
   local.environment_vars.locals
 )
 
-#Locals variables
+#Locals variables. These can be defined and nested upon your choice. 
+#I divide them into one file for the region-specific inputs and one for the environment-specific inputs.
+
 locals {
   #Automatically load region-level variables
   region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl"))
