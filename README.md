@@ -1,22 +1,22 @@
-# Terragrunt - spend less time on writing, more on learning
+# Terragrunt - write more, to write less
 
-### Disclaimer: I recently started learning Terragrunt and created this repository for my own purposes. This will gradually be updated. I am not suggesting that is how you should do it, just how I am using the tool for my own purposes. This template is written for Microsoft Azure.
+### Disclaimer: I recently begun using Terragrunt and I am still a novice. I created this repository to learn, but at the same time it might be useful for someone else. I am not saying that this is the optimal way of working, but it is how I am using the tool, for now. It will be continuously updated. 
 
 ## 1. Why Terragrunt?
-Terragrunt is a wrapper for Terraform, that sort of re-configures the way you'd normally define a deployment. The whole concept of Terragrunt is the term "DRY", which I am certain that you're probably familiar with. i.e *"Don't repeat yourself"*.
+Terragrunt is a wrapper for Terraform, that sort of modifies the way you'd normally define a deployment. The whole concept of Terragrunt is the term "DRY", i.e *"Don't repeat yourself"*. <br> You define a good parent configuration, that you can re-use for any environment.
 
-This is also the reason why I begun to learn about Terragrunt, becasue I was a bit irritated that I couldn't use variables for my remote backend in Terraform. Eventually I figured that it would lead to human errors about the name convention, overwrites etc of the state file; especially in a larger project. Hence why Terragrunt came to my mind.
+This is also the reason why I begun to learn about Terragrunt, becasue I was a bit irritated that I couldn't use variables for my remote backend in Terraform. <br> Eventually I figured that it would lead to human errors about the name convention, overwrites etc of the state file; especially in a larger project. Hence why Terragrunt came to my mind.
 
-Eventually I understood that Terragrunt can help with the deploy automation in many other aspects, other than just providing me with usable variables, in the remote backend configuration. This will just be a short introduction on how to get started with Terragrunt.
+Terragrunt can help with the deploy automation in many other aspects, other than just providing me with usable variables in the remote backend configuration. This will just be a short introduction on how to get started with Terragrunt.
 
 ## 2. Installation
-Installing Terragrunt is just as easy as any other application. If you are, as I am on macOS, the easiest way is to simply install it through Homebrew. *'brew install terragrunt'*. Obviously, in order to get this to work, you need to have Terraform/HCL Language Server installed as well. For further installation instructions, please refer to Gruntwork's official Terragrunt documentation. - https://terragrunt.gruntwork.io/docs/#getting-started
+Installing Terragrunt is just as easy as any other application. If you are as I am on macOS, the easiest way is to simply install it through Homebrew. *'brew install terragrunt'*. Obviously, in order to get this to work, you need to have Terraform/HCL Language Server and Azure CLI installed as well. For further installation instructions, please refer to Gruntwork's official Terragrunt documentation. - https://terragrunt.gruntwork.io/docs/#getting-started
 
 ## 3. Commands
-Terragrunt is using the same commands as Terraform, such as "init", "plan" and "apply". If you know your way around the CLI, you won't have any issues with adopting to Terragrunt from Terraform. Terragrunt also has a new command, "run-all". Which is combined with any of the default Terraform commands. Example: *'terragrunt run-all plan'*. This command grants us the possibility to run commands on several modules combined. More on that later.
+Terragrunt is using the same commands as Terraform, such as "init", "plan" and "apply". If you know your way around the CLI, you won't have any issues with adopting to Terragrunt from Terraform. Terragrunt also has a new command, "run-all". Which is combined with any of the other default Terraform commands. Example: *'terragrunt run-all plan'*. <br>This command grants us the possibility to run commands on several modules combined. More on that later.
 
 ## 4. How does it work? 
-The main purporse of Terragrunt is to remove as much of manual inputs as possible, so that you can easily swap to a different region, subscription or environment without having to alter that many inputs. I will describe the thought of my template and a tad bit on how Terragrunt works. 
+The main purpose of Terragrunt is to remove as much of manual inputs as possible, so that you can easily swap to a different region, subscription or environment without having to alter a lot of inputs. I will describe the thought of my template and a tad bit on how Terragrunt works. 
 
 #### *<ins>File structure</ins>*
 ```
@@ -47,15 +47,15 @@ The main purporse of Terragrunt is to remove as much of manual inputs as possibl
 ```
 *Obviously, this structure is supposed to be mirrored if you're using a different environment, such as "production".*
 
-_Most resources or configurations in the repository has comments added in the code, if something won't be explained within the README._
+_Most resources or configurations in the repository has comments added in the code, so if something isn't be explained within the README., it will probably be exaplined within the configuration files._
 #### *<ins>Defining your root configuration - terragrunt.hcl</ins>*
-Terragrunt's configuration is defined in a file called 'terragrunt.hcl' that you place in your root directory. This is a parent file, that all other sub-configuration files will refer to. Terragrunt will always climb up the tree structure to find a matching parent configuration. In this particular file you define the default settings and variables that all of your sub-directories can use and will refer to. This includes the provider(s) and its required versions, subscription and remote backend configuration. As you can see in the parent file, you can use variables within your backend configuration.
+Terragrunt's configuration is defined in a file called 'terragrunt.hcl' that you create in your root directory. This is a parent file, that all other sub-configuration files will refer to. Terragrunt will always climb up the tree structure to find a matching parent configuration. In this particular file you define the default settings and variables, that all of your sub-directories can use and will refer to. This includes the provider(s) and its required versions, subscription and remote backend configuration. As you can see in the parent file, you can use variables within your backend configuration.
 
 Another brilliant DRY feature is that you can define the provider directly in the parent configuration, which means that you'll never have to define the provider in your modules, as you have to do with a vanilla Terraform configuration.
 
 This is also where you specify your inputs and locals. I have specified the locals within each region/environment etc. By merging these in the root file, as you can see for "region_vars" and "environment_vars", you can specify several within one child configuration file. For instance I have stored the local inputs for the remote backend in the same "env.hcl" file. 
 
-This grants you the opportunity to write as little as code as possible. Some locals will probably be permanent for each environment, such as "env=dev" and "location=westeurope". Terragrunt will also automatically create a file structure for your state file, based on from where you initiate the command. 
+This grants you the opportunity to write as little as code as possible. Some locals will probably be permanent for each environment, such as "env=dev" and "location=westeurope", etc. Terragrunt will also automatically create a file structure for your state file, based on from where you initiate the command. 
 If I were to say, run a Terragrunt apply from within the resource_group directory under "/Customer_root/dev/westeurope/resource_group, the folder structure would be automatically built by Terragrunt in your remote backend (i.e Storage Account container).
 
 #### *<ins>Creating .hcl files for your directories</ins>*
@@ -67,10 +67,11 @@ We can then move further down in the directory, to resource specific Terragrunt 
 
 #### *<ins>Working with modules</ins>*
 Take a look at the "module1" directory and you'll notice that I am using an example from the public module repository. In this case, I am using a Vnet Module as an example. As you can see, you can create this resource solely without having to use any regular .tf files. 
+
 - Refer to the module URL and its version
 - Once again, include the "find in parent folders" configuration, just as you did with your RG
 - Define dependencies if needed
-- You need to create a mock RG, this won't be deployed, but Terragrunt needs a virtual resource group for it to be able to do the initialization, as it won't refer to the dependency until the resource gets planned/created. This can be named what ever and won't be created. 
+- You need to create a mock RG, this won't be deployed, but Terragrunt needs a virtual resource group for it to be able to do the initialization, as it won't refer to the dependency until the resource gets planned/created. This can be named w/e and won't actually be created. 
 - As always, refer to the locals
 - Define the mandatory/optional inputs for your module
 
