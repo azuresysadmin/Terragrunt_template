@@ -84,6 +84,6 @@ As this is a wrapper to Terraform, you still require your general .tf files, suc
 Terragrunt might take some time to configure initially, especially if you want to define the .hcl configurations on a very deep level. 
 I found it quite easy to use after I had a few hours of proper trial and error. I, for one, will most likely depend upon Terragrunt for my next project, whether if it's a personal or billed project. <br>It makes IaC more secure against human error and the whole concept of *DRY* really shines through as you start to get the hang of it. But yeah, that's it and that's all. You should be able to understand the basics of Terragrunt. Fire away.
 
-![alt text](https://i.imgur.com/l0msF1l.gif)
+<!-- ![alt text](https://i.imgur.com/l0msF1l.gif) --> 
 
 
