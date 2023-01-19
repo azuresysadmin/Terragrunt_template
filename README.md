@@ -13,7 +13,7 @@ Terragrunt can help with the deploy automation in many other aspects, other than
 Installing Terragrunt is just as easy as any other application. If you are as I am on macOS, the easiest way is to simply install it through Homebrew. *'brew install terragrunt'*. Obviously, in order to get this to work, you need to have Terraform/HCL Language Server and Azure CLI installed as well. <br>For further installation instructions, please refer to Gruntwork's official Terragrunt documentation. https://terragrunt.gruntwork.io/docs/#getting-started
 
 ## 3. Commands
-Terragrunt is using the same commands as Terraform, such as "init", "plan" and "apply". If you know your way around the CLI, you won't have any issues with adopting to Terragrunt from Terraform. Terragrunt also has a new command, "run-all". Which is combined with any of the other default Terraform commands. Example: *'terragrunt run-all plan'*. <br>This command grants us the possibility to run commands on several modules combined. More on that later.
+Terragrunt is using the same commands as Terraform, such as "init", "plan" and "apply". If you know your way around the CLI, you won't have any issues with adopting to Terragrunt from Terraform. Terragrunt also has a new command, "run-all". Which is combined with any of the other default Terraform commands. Example: *'terragrunt run-all plan'*. <br>This command grants us the possibility to run commands on several modules combined. https://terragrunt.gruntwork.io/docs/reference/cli-options/
 
 ## 4. How does it work? 
 The main purpose of Terragrunt is to remove as much of manual inputs as possible, so that you can easily swap to a different region, subscription or environment without having to alter a lot of inputs. I will describe the thought of my template and a tad bit on how Terragrunt works. 
@@ -82,7 +82,7 @@ As this is a wrapper to Terraform, you still require your general .tf files, suc
 
 ## 5. Conclusion
 Terragrunt might take some time to configure initially, especially if you want to define the .hcl configurations on a very deep level. 
-I found it quite easy to use after I had a few hours of proper trial and error. I, for one, will most likely depend upon Terragrunt for my next project, whether if it's a personal or billed project. <br>It makes IaC more secure against human error and the whole concept of *DRY* really shines through as you start to get the hang of it. But yeah, that's it and that's all. You should be able to understand the basics of Terragrunt. Fire away.
+I found it quite easy to use after I had a few hours of proper trial and error. I, for one, will most likely depend upon Terragrunt for my next project, whether if it's a personal or billed project. <br>It makes IaC more secure against human error and the whole concept of *DRY* really shines through as you start to get the hang of it. But yeah, that's it and that's all. You should be able to understand the basics of Terragrunt. <br>All the documentation can be found here. https://terragrunt.gruntwork.io/docs/
 
 <!-- ![alt text](https://i.imgur.com/l0msF1l.gif) --> 
 
