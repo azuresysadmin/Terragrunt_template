@@ -3,9 +3,11 @@
 ### Disclaimer: I recently begun using Terragrunt and I am still a novice. I created this repository to learn, but at the same time it might be useful for someone else. I am not saying that this is the optimal way of working, but it is how I am using the tool, for now. It will be continuously updated. 
 
 ## 1. Why Terragrunt?
-Terragrunt is a wrapper for Terraform, that sort of modifies the way you'd normally define a deployment. The whole concept of Terragrunt is the term "DRY", i.e *"Don't repeat yourself"*. <br> You define a good parent configuration, that you can re-use for any environment.
+Terragrunt is a wrapper for Terraform, that sort of modifies the way you'd normally define a deployment. The whole concept of Terragrunt is the term "DRY", i.e *"Don't repeat yourself"*.  
+You define a good parent configuration, that you can re-use for any environment.
 
-This is also the reason why I begun to learn about Terragrunt, becasue I was a bit irritated that I couldn't use variables for my remote backend in Terraform. <br> Eventually I figured that it would lead to human errors about the name convention, overwrites etc of the state file; especially in a larger project. Hence why Terragrunt came to my mind.
+This is also the reason why I begun to learn about Terragrunt, becasue I was a bit irritated that I couldn't use variables for my remote backend in Terraform.  
+Eventually I figured that it would lead to human errors about the name convention, overwrites etc of the state file; especially in a larger project. Hence why Terragrunt came to my mind.
 
 Terragrunt can help with the deploy automation in many other aspects, other than just providing me with usable variables in the remote backend configuration. This will just be a short introduction on how to get started with Terragrunt.
 
@@ -13,7 +15,8 @@ Terragrunt can help with the deploy automation in many other aspects, other than
 Installing Terragrunt is just as easy as any other application. If you are as I am on macOS, the easiest way is to simply install it through Homebrew. *'brew install terragrunt'*. Obviously, in order to get this to work, you need to have Terraform/HCL Language Server and Azure CLI installed as well. <br>For further installation instructions, please refer to Gruntwork's official Terragrunt documentation. https://terragrunt.gruntwork.io/docs/#getting-started
 
 ## 3. Commands
-Terragrunt is using the same commands as Terraform, such as "init", "plan" and "apply". If you know your way around the CLI, you won't have any issues with adopting to Terragrunt from Terraform. Terragrunt also has a new command, "run-all". Which is combined with any of the other default Terraform commands. Example: *'terragrunt run-all plan'*. <br>This command grants us the possibility to run commands on several modules combined. https://terragrunt.gruntwork.io/docs/reference/cli-options/
+Terragrunt is using the same commands as Terraform, such as "init", "plan" and "apply". If you know your way around the CLI, you won't have any issues with adopting to Terragrunt from Terraform. Terragrunt also has a new command, "run-all". Which is combined with any of the other default Terraform commands. Example: *'terragrunt run-all plan'*.  
+This command grants us the possibility to run commands on several modules combined. https://terragrunt.gruntwork.io/docs/reference/cli-options/
 
 ## 4. How does it work? 
 The main purpose of Terragrunt is to remove as much of manual inputs as possible, so that you can easily swap to a different region, subscription or environment without having to alter a lot of inputs. I will describe the thought of my template and a tad bit on how Terragrunt works. 
@@ -23,29 +26,25 @@ The main purpose of Terragrunt is to remove as much of manual inputs as possible
 📦Customer_root
  ┣ 📂Development
  ┃ ┣ 📂region
- ┃ ┃ ┣ 📂modules
- ┃ ┃ ┃ ┗ 📂module1
- ┃ ┃ ┃ ┃ ┗ 📜terragrunt.hcl
  ┃ ┃ ┣ 📂resource_group
- ┃ ┃ ┃ ┣ 📜main.tf
- ┃ ┃ ┃ ┣ 📜outputs.tf
- ┃ ┃ ┃ ┣ 📜terragrunt.hcl
- ┃ ┃ ┃ ┗ 📜variables.tf
+ ┃ ┃ ┃ ┗ 📜terragrunt.hcl
+ ┃ ┃ ┣ 📂vnet
+ ┃ ┃ ┃ ┗ 📜terragrunt.hcl
  ┃ ┃ ┗ 📜region.hcl
- ┃ ┣ 📂region2
- ┃ ┃ ┣ 📂modules
- ┃ ┃ ┃ ┗ 📂module1
- ┃ ┃ ┃ ┃ ┗ 📜terragrunt.hcl
+ ┃ ┣ 📜customer.hcl
+ ┃ ┗ 📜env.hcl
+ ┣ 📂Production
+ ┃ ┣ 📂region
  ┃ ┃ ┣ 📂resource_group
- ┃ ┃ ┃ ┣ 📜main.tf
- ┃ ┃ ┃ ┣ 📜outputs.tf
- ┃ ┃ ┃ ┣ 📜terragrunt.hcl
- ┃ ┃ ┃ ┗ 📜variables.tf
+ ┃ ┃ ┃ ┗ 📜terragrunt.hcl
+ ┃ ┃ ┣ 📂vnet
+ ┃ ┃ ┃ ┗ 📜terragrunt.hcl
  ┃ ┃ ┗ 📜region.hcl
+ ┃ ┣ 📜customer.hcl
  ┃ ┗ 📜env.hcl
  ┗ 📜terragrunt.hcl
 ```
-*Obviously, this structure is supposed to be mirrored if you're using a different environment, such as "production".*
+*Obviously, this structure is supposed to be mirrored if you're using a different environment, such as "stage".*
 
 _Most resources or configurations in the repository has comments added in the code, so if something isn't be explained within the README., it will probably be exaplined within the configuration files._
 #### *<ins>Defining your root configuration - terragrunt.hcl</ins>*
@@ -66,7 +65,7 @@ Firstly, I have created an "env.hcl" in my Development/Production directory, whi
 We can then move further down in the directory, to resource specific Terragrunt configurations. In this file, you will tell Terragrunt to look for the parent configuration, which is what I described previously on how Terragrunt will search for the necessary inputs and configurations. This is also were you'd define your inputs, so that your resource blocks can consist of variables, instead of hardcoded inputs. 
 
 #### *<ins>Working with modules</ins>*
-Take a look at the "module1" directory and you'll notice that I am using an example from the public module repository. In this case, I am using a Vnet Module as an example. As you can see, you can create this resource solely without having to use any regular .tf files. 
+Take a look at the "Development/region/resource_group" directory where I am using a Vnet Module as an example. As you can see, you can create this resource solely without having to use any regular .tf files. 
 
 - Refer to the module URL and its version
 - Once again, include the "find in parent folders" configuration, just as you did with your RG
@@ -82,7 +81,9 @@ As this is a wrapper to Terraform, you still require your general .tf files, suc
 
 ## 5. Conclusion
 Terragrunt might take some time to configure initially, especially if you want to define the .hcl configurations on a very deep level. 
-I found it quite easy to use after I had a few hours of proper trial and error. I, for one, will most likely depend upon Terragrunt for my next project, whether if it's a personal or billed project. <br>It makes IaC more secure against human error and the whole concept of *DRY* really shines through as you start to get the hang of it. But yeah, that's it and that's all. You should be able to understand the basics of Terragrunt. <br>All the documentation can be found here. https://terragrunt.gruntwork.io/docs/
+I found it quite easy to use after I had a few hours of proper trial and error. I, for one, will most likely depend upon Terragrunt for my next project, whether if it's a personal or billed project.  
+It makes IaC more secure against human error and the whole concept of *DRY* really shines through as you start to get the hang of it. But yeah, that's it and that's all. You should be able to understand the basics of Terragrunt.  
+All the documentation can be found here. https://terragrunt.gruntwork.io/docs/
 
 <!-- ![alt text](https://i.imgur.com/l0msF1l.gif) --> 
 

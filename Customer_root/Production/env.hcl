@@ -1,9 +1,9 @@
-#Define the environment specific variables. Such as environment, subscription and backend configuration.
+# Define the environment specific variables. Such as environment, subscription and backend configuration.
 locals {
-  environment     = "production"
-  subscription_id = "PLACEHOLDER"
-  contact         = "PLACEHOLDER"
-  backend_rg      = "PLACEHOLDER"
-  backend_sa      = "PLACEHOLDER"
-  backend_con     = "PLACEHOLDER"
+  environment     = "Production"
+
+  # Backend variables
+  backend_rg  = ""
+  backend_sa  = ""
+  backend_con = ""
 }
